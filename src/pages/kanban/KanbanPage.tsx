@@ -15,6 +15,13 @@ export const KanbanPage = () => {
 
           <Board />
         </Stack>
+
+        <p>
+          Github -{" "}
+          <a href="https://github.com/dmrompav/vg-test">
+            https://github.com/dmrompav/vg-test
+          </a>
+        </p>
       </Container>
     </Box>
   );
