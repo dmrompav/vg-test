@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -24,19 +24,27 @@ jobs:
       - name: Setup PNPM
         uses: pnpm/action-setup@v4
         with:
-          version: 8
+          version: 10
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
+          cache: "pnpm"
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: |
+          if [ -f pnpm-lock.yaml ]; then
+            pnpm install --frozen-lockfile
+          else
+            echo "No lockfile found. Installing without frozen lockfile."
+            pnpm install --no-frozen-lockfile
+          fi
 
       - name: Build (set base for Pages)
-        run: pnpm build -- --base=/${{ github.event.repository.name }}/
+        run: |
+          export BASE_PATH=/${{ github.event.repository.name }}/
+          pnpm build
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
